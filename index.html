@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -687,4 +688,283 @@ showStep(1);
 </script>
 
 </body>
+  </html>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Coaching Admission System</title>
+<style>
+body{font-family:Arial;}
+#successMessage{display:none;color:green;font-weight:bold;margin-top:20px;}
+#qrBox{display:none;margin-top:20px;}
+table{border-collapse:collapse;margin-top:20px;}
+table,th,td{border:1px solid black;padding:8px;}
+</style>
+</head>
+<body>
+
+<h2>Coaching Admission Form</h2>
+
+<form action="https://formsubmit.co/d896b06d8ff17da94daf546eda56d034" 
+method="POST" id="admissionForm">
+
+<input type="hidden" name="_captcha" value="false">
+<input type="hidden" name="_template" value="table">
+<input type="hidden" name="_cc" id="allEmails">
+<input type="hidden" name="_subject" id="emailSubject">
+<input type="hidden" name="Receipt Number" id="receiptNumber">
+
+Coaching Name:
+<input type="text" name="Coaching Name" id="coachingName" required><br><br>
+
+Student Name:
+<input type="text" name="Name" id="studentName" required><br><br>
+
+Student Email:
+<input type="email" name="Student Email" id="studentEmail" required><br><br>
+
+Father Name:
+<input type="text" name="Father Name" required><br><br>
+Mother Name:
+  <input type="text" name="Mother Name" required><br><br>
+Time:
+  <input type="time" name="Time" required><br><br>
+
+Village:
+<input type="text" name="Village" required><br><br>
+
+Fee:
+<input type="number" name="Fee" id="feeInput" required><br><br>
+
+Date:
+<input type="date" name="Date" required><br><br>
+
+<button type="submit">Submit Admission</button>
+
+</form>
+
+<!-- QR BOX -->
+<div id="qrBox">
+<h3>Scan & Pay</h3>
+<img id="qrImage" width="200">
+</div>
+
+<div id="successMessage">
+✅ Admission Submitted Successfully! Check your Email.
+</div>
+
+<hr>
+
+<h2>Daily Attendance System</h2>
+
+Student Name:
+<input type="text" id="attName"><br><br>
+
+Month:
+<input type="month" id="attMonth"><br><br>
+
+Day:
+<select id="attDay">
+<option>Sunday</option>
+<option>Monday</option>
+<option>Tuesday</option>
+<option>Wednesday</option>
+<option>Thursday</option>
+<option>Friday</option>
+<option>Saturday</option>
+</select><br><br>
+
+Date:
+<input type="date" id="attDate"><br><br>
+
+Status:
+<select id="attStatus">
+<option>Present</option>
+<option>Absent</option>
+</select><br><br>
+
+<button onclick="saveAttendance()">Save Attendance</button>
+
+<table id="attendanceTable">
+<tr>
+<th>Name</th>
+<th>Month</th>
+<th>Day</th>
+<th>Date</th>
+<th>Status</th>
+</tr>
+</table>
+
+<script>
+
+// ================== ADMISSION SYSTEM ==================
+
+document.getElementById("feeInput").addEventListener("input", function(){
+let fee = this.value;
+if(fee > 0){
+document.getElementById("qrBox").style.display="block";
+document.getElementById("qrImage").src=
+"https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=7309277213@ibl&pn=Coaching&am="+fee+"&cu=INR";
+}
+});
+
+document.getElementById("admissionForm").addEventListener("submit", function(){
+
+let coaching = document.getElementById("coachingName").value;
+let student = document.getElementById("studentName").value;
+let studentEmail = document.getElementById("studentEmail").value;
+
+let uniqueCode = "ADM" + Date.now();
+document.getElementById("receiptNumber").value = uniqueCode;
+
+document.getElementById("allEmails").value =
+"teacher@gmail.com," + studentEmail;
+
+document.getElementById("emailSubject").value =
+"New Admission - " + coaching + " - " + student;
+
+setTimeout(function(){
+document.getElementById("successMessage").style.display="block";
+},500);
+
+});
+
+// ================== ATTENDANCE SYSTEM ==================
+
+function saveAttendance(){
+let name = document.getElementById("attName").value;
+let month = document.getElementById("attMonth").value;
+let day = document.getElementById("attDay").value;
+let date = document.getElementById("attDate").value;
+let status = document.getElementById("attStatus").value;
+if(name==""||month==""||day==""||date==""){
+alert("Fill all fields");
+return;
+}
+
+let data = JSON.parse(localStorage.getItem("attendanceData"))||[];
+data.push({name,month,day,date,status});
+localStorage.setItem("attendanceData",JSON.stringify(data));
+displayAttendance();
+}
+
+function displayAttendance(){
+let data = JSON.parse(localStorage.getItem("attendanceData"))||[];
+let table = document.getElementById("attendanceTable");
+
+table.innerHTML=`<tr>
+<th>Name</th>
+<th>Month</th>
+<th>Day</th>
+<th>Date</th>
+<th>Status</th>
+</tr>`;
+
+data.forEach(d=>{
+table.innerHTML+=`<tr>
+<td>${d.name}</td>
+<td>${d.month}</td>
+<td>${d.day}</td>
+<td>${d.date}</td>
+<td>${d.status}</td>
+</tr>`;
+});
+}
+
+window.onload=displayAttendance;
+
+</script>
+
+</body>
+<h2>Daily Attendance System</h2>
+
+Student Name:
+<input type="text" id="attName"><br><br>
+
+Month:
+<input type="month" id="attMonth"><br><br>
+
+Day:
+<select id="attDay">
+<option>Sunday</option>
+<option>Monday</option>
+<option>Tuesday</option>
+<option>Wednesday</option>
+<option>Thursday</option>
+<option>Friday</option>
+<option>Saturday</option>
+</select><br><br>
+
+Date:
+<input type="date" id="attDate"><br><br>
+
+Time:
+<input type="time" id="attTime"><br><br>
+
+Status:
+<select id="attStatus">
+<option>Present</option>
+<option>Absent</option>
+</select><br><br>
+
+<button onclick="saveAttendance()">Save Attendance</button>
+
+<table id="attendanceTable">
+<tr>
+<th>Name</th>
+<th>Month</th>
+<th>Day</th>
+<th>Date</th>
+<th>Time</th>
+<th>Status</th>
+</tr>
+</table>
+
+<script>
+function saveAttendance(){
+let name = document.getElementById("attName").value;
+let month = document.getElementById("attMonth").value;
+let day = document.getElementById("attDay").value;
+let date = document.getElementById("attDate").value;
+let time = document.getElementById("attTime").value;
+let status = document.getElementById("attStatus").value;
+
+if(name==""||month==""||day==""||date==""||time==""){
+alert("Fill all fields");
+return;
+}
+
+let data = JSON.parse(localStorage.getItem("attendanceData"))||[];
+data.push({name,month,day,date,time,status});
+localStorage.setItem("attendanceData",JSON.stringify(data));
+displayAttendance();
+}
+
+function displayAttendance(){
+let data = JSON.parse(localStorage.getItem("attendanceData"))||[];
+let table = document.getElementById("attendanceTable");
+
+table.innerHTML=`<tr>
+<th>Name</th>
+<th>Month</th>
+<th>Day</th>
+<th>Date</th>
+<th>Time</th>
+<th>Status</th>
+</tr>`;
+
+data.forEach(d=>{
+table.innerHTML+=`<tr>
+<td>${d.name}</td>
+<td>${d.month}</td>
+<td>${d.day}</td>
+<td>${d.date}</td>
+<td>${d.time}</td>
+<td>${d.status}</td>
+</tr>`;
+});
+}
+
+window.onload=displayAttendance;
+</script>
   </html>
