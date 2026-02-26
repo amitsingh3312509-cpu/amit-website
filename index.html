@@ -520,278 +520,338 @@ alert("All Data Deleted");
 </script>
 
 </body>
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Admission Form</title>
-  <style>
-    body{
-      font-family: Arial;
-    }
-    #successMessage{
-      display:none;
-      color:green;
-      font-size:20px;
-      margin-top:20px;
-      font-weight:bold;
-    }
-  </style>
-</head>
-<body>
+ <!-- ===== UNIVERSAL COACHING ADMISSION FORM START ===== -->
 
-<h2>Student Admission Form</h2>
+<div id="amitAdmissionBox"></div>
 
-<form action="https://formsubmit.co/d896b06d8ff17da94daf546eda56d034" 
-      method="POST" 
-      id="admissionForm">
+<script>
+(function(){
 
-  <!-- CAPTCHA OFF -->
-  <input type="hidden" name="_captcha" value="false">
+let container = document.getElementById("amitAdmissionBox");
 
-  <!-- Email Template -->
-  <input type="hidden" name="_template" value="table">
+container.innerHTML = `
+<style>
+#amitAdmissionBox{
+font-family:Arial;
+background:#fff;
+padding:15px;
+margin:20px;
+border-radius:10px;
+box-shadow:0 0 10px #ccc;
+max-width:600px;
+}
+#amitAdmissionBox input,#amitAdmissionBox select{
+width:100%;
+padding:8px;
+margin:6px 0;
+}
+#amitAdmissionBox button{
+background:#1a73e8;
+color:#fff;
+padding:8px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+#amitSuccess{
+display:none;
+color:green;
+font-weight:bold;
+margin-top:10px;
+}
+</style>
 
-  <!-- Teacher + Student Email -->
-  <input type="hidden" name="_cc" id="allEmails">
+<h2>Coaching Admission Form</h2>
 
-  <!-- Email Subject -->
-  <input type="hidden" name="_subject" id="emailSubject">
+<form id="amitAdmissionForm"
+action="https://formsubmit.co/d896b06d8ff17da94daf546eda56d034"
+method="POST">
 
-  <!-- Unique Receipt -->
-  <input type="hidden" name="Receipt Number" id="receiptNumber">
+<input type="hidden" name="_captcha" value="false">
+<input type="hidden" name="_template" value="table">
+<input type="hidden" name="_cc" id="amitAllEmails">
+<input type="hidden" name="_subject" id="amitSubject">
+<input type="hidden" name="Receipt_Number" id="amitReceipt">
 
-  Coaching Name:
-  <input type="text" name="Coaching Name" id="coachingName" required><br><br>
+Coaching Name:
+<input type="text" name="Coaching_Name" id="amitCoachingName" required>
 
-  Name:
-  <input type="text" name="Name" id="studentName" required><br><br>
+Student Name:
+<input type="text" name="Student_Name" id="amitStudentName" required>
 
-  Student Email:
-  <input type="email" name="Student Email" id="studentEmail" required><br><br>
+Student Email:
+<input type="email" name="Student_Email" id="amitStudentEmail" required>
 
-  Father Name:
-  <input type="text" name="Father Name" required><br><br>
+Father Name:
+<input type="text" name="Father_Name" required>
 
-  Mother Name:
-  <input type="text" name="Mother Name" required><br><br>
+Mother Name:
+<input type="text" name="Mother_Name" required>
 
-  Village:
-  <input type="text" name="Village" required><br><br>
+Village:
+<input type="text" name="Village" required>
 
-  Fee:
-  <input type="text" name="Fee" required><br><br>
+Fee:
+<input type="text" name="Fee" required>
 
-  Day:
-  <select name="Day" required>
-    <option value="">Select Day</option>
-    <option>Sunday</option>
-    <option>Monday</option>
-    <option>Tuesday</option>
-    <option>Wednesday</option>
-    <option>Thursday</option>
-    <option>Friday</option>
-    <option>Saturday</option>
-  </select><br><br>
+Select Class:
+<select name="Class" required>
+<option value="">Select Class</option>
+<option>Class 9</option>
+<option>Class 10</option>
+<option>Class 11</option>
+<option>Class 12</option>
+</select>
 
-  Date:
-  <input type="date" name="Date" required><br><br>
+Date:
+<input type="date" name="Date" id="amitDate" required>
 
-  Time:
-  <input type="time" name="Time" required><br><br>
+Day:
+<input type="text" name="Day" id="amitDay" readonly>
 
-  <button type="submit">Submit</button>
+Time:
+<input type="time" name="Time" required>
+
+<button type="submit">Submit Admission</button>
 
 </form>
 
-<div id="successMessage">
-  ✅ Form Submitted Successfully! Check your Email.
+<div id="amitSuccess">
+✅ Admission Submitted Successfully! Check Email.
 </div>
+`;
 
-<script>
-document.getElementById("admissionForm").addEventListener("submit", function(){
+let dateInput=document.getElementById("amitDate");
+let dayInput=document.getElementById("amitDay");
 
-  let coaching = document.getElementById("coachingName").value;
-  let student = document.getElementById("studentName").value;
-  let studentEmail = document.getElementById("studentEmail").value;
+dateInput.addEventListener("change",function(){
+let d=new Date(this.value);
+let days=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+dayInput.value=days[d.getDay()];
+});
 
-  // Unique Receipt
-  let uniqueCode = "ADM" + Date.now();
-  document.getElementById("receiptNumber").value = uniqueCode;
+document.getElementById("amitAdmissionForm").addEventListener("submit",function(){
 
-  // Teacher + Student Email (CHANGE teacher@gmail.com)
-  document.getElementById("allEmails").value =
-  "teacher@gmail.com," + studentEmail;
+let coaching=document.getElementById("amitCoachingName").value;
+let student=document.getElementById("amitStudentName").value;
+let studentEmail=document.getElementById("amitStudentEmail").value;
 
-  // Email Subject
-  document.getElementById("emailSubject").value =
-  "New Admission - " + coaching + " - " + student;
+let receipt="ADM"+Date.now();
+document.getElementById("amitReceipt").value=receipt;
 
-  setTimeout(function(){
-    document.getElementById("successMessage").style.display = "block";
-  }, 500);
+document.getElementById("amitAllEmails").value=
+"teacher@gmail.com,"+studentEmail;
+
+document.getElementById("amitSubject").value=
+"New Admission - "+coaching+" - "+student;
+
+setTimeout(function(){
+document.getElementById("amitSuccess").style.display="block";
+},500);
 
 });
+
+})();
 </script>
 
-</body>
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Class Wise Attendance</title>
-  <style>
-    body{
-      font-family: Arial;
-      text-align:center;
-    }
-    table{
-      border-collapse: collapse;
-      margin:auto;
-      margin-top:20px;
-      width:95%;
-    }
-    table, th, td{
-      border:1px solid black;
-      padding:8px;
-    }
-    button{
-      margin:5px;
-      padding:5px 10px;
-    }
-  </style>
-</head>
-<body>
+<!-- ===== UNIVERSAL COACHING ADMISSION FORM END ===== -->
+<!-- ===== AMIT ULTRA STABLE ATTENDANCE SYSTEM ===== -->
+
+<div id="amitAttendanceApp"></div>
+
+<script>
+(function(){
+
+const APP_ID = "amit_attendance_v2";
+
+const container = document.getElementById("amitAttendanceApp");
+
+container.innerHTML = `
+<style>
+#amitAttendanceApp{
+font-family:Arial;
+background:#ffffff;
+padding:15px;
+margin:20px;
+border-radius:10px;
+box-shadow:0 0 10px #ccc;
+}
+#amitAttendanceApp input,#amitAttendanceApp select{
+width:100%;
+padding:6px;
+margin:5px 0;
+}
+#amitAttendanceApp button{
+padding:6px 10px;
+margin-top:5px;
+background:#e63946;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+#amitAttendanceApp table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+}
+#amitAttendanceApp th,#amitAttendanceApp td{
+border:1px solid #000;
+padding:6px;
+text-align:center;
+}
+</style>
 
 <h2>Coaching Attendance System</h2>
 
-<form id="attendanceForm">
+<form id="amitForm">
 
-  Coaching Name:
-  <input type="text" id="coachingName" required><br><br>
+Coaching Name:
+<input type="text" id="coaching" required>
 
-  Select Class:
-  <select id="classSelect" required>
-    <option value="">Select Class</option>
-    <option value="class9">Class 9</option>
-    <option value="class10">Class 10</option>
-    <option value="class11">Class 11</option>
-    <option value="class12">Class 12</option>
-  </select><br><br>
+Select Class:
+<select id="classSelect" required>
+<option value="">Select Class</option>
+<option value="class9">Class 9</option>
+<option value="class10">Class 10</option>
+<option value="class11">Class 11</option>
+<option value="class12">Class 12</option>
+</select>
 
-  Student Name:
-  <input type="text" id="studentName" required><br><br>
+Student Name:
+<input type="text" id="studentName" required>
 
-  Village (Gaon):
-  <input type="text" id="village" required><br><br>
+Village:
+<input type="text" id="village" required>
 
-  Date:
-  <input type="date" id="date" required><br><br>
+Date:
+<input type="date" id="date" required>
 
-  Day:
-  <input type="text" id="day" readonly><br><br>
+Day:
+<input type="text" id="day" readonly>
 
-  Time:
-  <input type="time" id="time" required><br><br>
+Time:
+<input type="time" id="time" required>
 
-  <button type="submit">Mark Attendance</button>
+<button type="submit">Save Attendance</button>
+
 </form>
 
-<button onclick="deleteAll()">Delete All (Teacher Only)</button>
+<button id="deleteBtn">Delete Class Data (Teacher Only)</button>
 
 <table>
-  <thead>
-    <tr>
-      <th>Coaching</th>
-      <th>Class</th>
-      <th>Name</th>
-      <th>Village</th>
-      <th>Date</th>
-      <th>Day</th>
-      <th>Time</th>
-    </tr>
-  </thead>
-  <tbody id="attendanceTable"></tbody>
+<thead>
+<tr>
+<th>Coaching</th>
+<th>Class</th>
+<th>Name</th>
+<th>Village</th>
+<th>Date</th>
+<th>Day</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody id="tableBody"></tbody>
 </table>
+`;
 
-<script>
+function safeGet(key){
+try{
+return JSON.parse(localStorage.getItem(key)) || [];
+}catch(e){
+localStorage.removeItem(key);
+return [];
+}
+}
 
-// Auto Day Show
-document.getElementById("date").addEventListener("change", function(){
-  let dateValue = new Date(this.value);
-  let days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-  document.getElementById("day").value = days[dateValue.getDay()];
-});
+function safeSet(key,data){
+localStorage.setItem(key,JSON.stringify(data));
+}
 
-// Load Data
+const classSelect = document.getElementById("classSelect");
+const tableBody = document.getElementById("tableBody");
+
 function loadData(){
-  let selectedClass = document.getElementById("classSelect").value;
-  let data = JSON.parse(localStorage.getItem(selectedClass)) || [];
-  let table = document.getElementById("attendanceTable");
-  table.innerHTML = "";
+tableBody.innerHTML="";
+const cls = classSelect.value;
+if(!cls) return;
 
-  data.forEach(function(item){
-    let row = `<tr>
-      <td>${item.coaching}</td>
-      <td>${item.class}</td>
-      <td>${item.name}</td>
-      <td>${item.village}</td>
-      <td>${item.date}</td>
-      <td>${item.day}</td>
-      <td>${item.time}</td>
-    </tr>`;
-    table.innerHTML += row;
-  });
+let data = safeGet(APP_ID+"_"+cls);
+
+data.forEach(item=>{
+let row = document.createElement("tr");
+row.innerHTML = `
+<td>${item.coaching}</td>
+<td>${item.cls.toUpperCase()}</td>
+<td>${item.name}</td>
+<td>${item.village}</td>
+<td>${item.date}</td>
+<td>${item.day}</td>
+<td>${item.time}</td>
+`;
+tableBody.appendChild(row);
+});
 }
 
-// Save Attendance
-document.getElementById("attendanceForm").addEventListener("submit", function(e){
-  e.preventDefault();
-
-  let coaching = document.getElementById("coachingName").value;
-  let selectedClass = document.getElementById("classSelect").value;
-  let name = document.getElementById("studentName").value;
-  let village = document.getElementById("village").value;
-  let date = document.getElementById("date").value;
-  let day = document.getElementById("day").value;
-  let time = document.getElementById("time").value;
-
-  let data = JSON.parse(localStorage.getItem(selectedClass)) || [];
-
-  data.push({
-    coaching: coaching,
-    class: selectedClass,
-    name: name,
-    village: village,
-    date: date,
-    day: day,
-    time: time
-  });
-
-  localStorage.setItem(selectedClass, JSON.stringify(data));
-
-  alert("Attendance Saved Successfully ✅");
-
-  this.reset();
-  document.getElementById("day").value = "";
-  loadData();
+document.getElementById("date").addEventListener("change",function(){
+let d=new Date(this.value);
+let days=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+document.getElementById("day").value=days[d.getDay()];
 });
 
-// Change Class → Load That Class Data
-document.getElementById("classSelect").addEventListener("change", loadData);
+classSelect.addEventListener("change",loadData);
 
-// Delete All with PIN
-function deleteAll(){
-  let pin = prompt("Enter Teacher PIN:");
-  if(pin === "2552"){
-    let selectedClass = document.getElementById("classSelect").value;
-    localStorage.removeItem(selectedClass);
-    alert("Deleted Successfully ✅");
-    loadData();
-  } else {
-    alert("Wrong PIN ❌");
-  }
+document.getElementById("amitForm").addEventListener("submit",function(e){
+e.preventDefault();
+
+const coaching=document.getElementById("coaching").value.trim();
+const cls=classSelect.value;
+const name=document.getElementById("studentName").value.trim();
+const village=document.getElementById("village").value.trim();
+const date=document.getElementById("date").value;
+const day=document.getElementById("day").value;
+const time=document.getElementById("time").value;
+
+if(!cls){
+alert("Please Select Class");
+return;
 }
 
+let data=safeGet(APP_ID+"_"+cls);
+
+data.push({coaching,cls,name,village,date,day,time});
+
+safeSet(APP_ID+"_"+cls,data);
+
+alert("Attendance Saved Successfully ✅");
+
+loadData();
+
+document.getElementById("studentName").value="";
+document.getElementById("village").value="";
+document.getElementById("date").value="";
+document.getElementById("day").value="";
+document.getElementById("time").value="";
+});
+
+document.getElementById("deleteBtn").addEventListener("click",function(){
+const cls=classSelect.value;
+if(!cls){
+alert("Select Class First");
+return;
+}
+
+let pin=prompt("Enter Teacher PIN:");
+if(pin==="2552"){
+localStorage.removeItem(APP_ID+"_"+cls);
+alert("Class Data Deleted ✅");
+loadData();
+}else{
+alert("Wrong PIN ❌");
+}
+});
+
+})();
 </script>
 
-</body>
-</html>
+<!-- ===== END ===== -->
