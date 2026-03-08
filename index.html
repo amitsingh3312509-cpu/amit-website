@@ -39,7 +39,7 @@ button{
 <div class="container">
 <h1>Amantran Restaurant</h1>
 
-<form id="orderform" action="https://formsubmit.co/amitsingh3312509@gmail.com" method="POST">
+<form id="orderform" action="https://formsubmit.co/YOUR_OWNER_EMAIL@gmail.com" method="POST">
 <input type="hidden" name="_captcha" value="false">
 
 <label>Name</label><br>
@@ -52,13 +52,13 @@ button{
 <input type="text" name="Village"><br>
 
 <label>Food Item</label><br>
-<select id="food" name="Food Name" onchange="price()">
-<option value="Veg Sandwich" data-price="80">Veg Sandwich 80</option>
-<option value="Veg Burger" data-price="60">Veg Burger 60</option>
-<option value="Paneer Burger" data-price="70">Paneer Burger 70</option>
-<option value="Masala Dosa" data-price="110">Masala Dosa 110</option>
-<option value="Paneer Butter Masala" data-price="180">Paneer Butter Masala 180</option>
-<option value="Chicken Biryani" data-price="260">Chicken Biryani 260</option>
+<select id="food" name="Food Name" onchange="updatePrice()">
+<option value="Veg Sandwich" data-price="80">Veg Sandwich - ₹80</option>
+<option value="Veg Burger" data-price="60">Veg Burger - ₹60</option>
+<option value="Paneer Burger" data-price="70">Paneer Burger - ₹70</option>
+<option value="Masala Dosa" data-price="110">Masala Dosa - ₹110</option>
+<option value="Paneer Butter Masala" data-price="180">Paneer Butter Masala - ₹180</option>
+<option value="Chicken Biryani" data-price="260">Chicken Biryani - ₹260</option>
 </select>
 
 <br><br>
@@ -72,7 +72,12 @@ button{
 <br><br>
 
 <label>Quantity</label><br>
-<input type="number" id="qty" value="1" onchange="price()">
+<input type="number" id="qty" value="1" onchange="updatePrice()">
+
+<br><br>
+
+<label>Unit Price (Food Rate)</label><br>
+<input type="text" id="unitPrice" name="Food Rate" readonly>
 
 <br><br>
 
@@ -95,7 +100,6 @@ button{
 <label>Time</label><br>
 <input type="text" id="time" name="Time" readonly><br>
 
-<!-- Transaction ID Field -->
 <label>UPI Transaction ID</label><br>
 <input type="text" name="UPI Transaction ID" placeholder="Enter UPI Payment ID" required><br>
 
@@ -107,11 +111,13 @@ button{
 </div>
 
 <script>
-function price(){
+function updatePrice(){
   var food = document.getElementById("food");
-  var price = food.options[food.selectedIndex].dataset.price;
+  var unitPrice = food.options[food.selectedIndex].dataset.price;
   var qty = document.getElementById("qty").value;
-  var total = price * qty;
+  var total = unitPrice * qty;
+
+  document.getElementById("unitPrice").value = unitPrice; // Food Rate
   document.getElementById("total").value = total;
   document.getElementById("advance").value = total / 2;
 }
@@ -126,18 +132,16 @@ document.getElementById("time").value = d.toLocaleTimeString();
 var receiptNum = "AMT" + Math.floor(Math.random()*900000 + 100000);
 document.getElementById("receipt").value = receiptNum;
 
-// UPI Payment + guide user to enter Transaction ID
+// UPI Payment + manual transaction ID
 function pay(){
   var advance = document.getElementById("advance").value;
-  var upi = "upi://pay?pa=rakeshpandeyrakesh27-1@okhdfcbank&pn=AmantranRestaurant&am="+advance+"&cu=INR";
+  var upi = "upi://pay?pa=YOUR_UPI_ID&pn=AmantranRestaurant&am="+advance+"&cu=INR";
   
-  // Open UPI app on phone
+  // Open UPI app
   window.location.href = upi;
 
-  alert("Please complete payment in your UPI app. After payment, copy the Transaction ID and paste it in the 'UPI Transaction ID' field, then click 'Pay & Confirm Order' again.");
+  alert("Please complete payment in your UPI app. After payment, copy Transaction ID and paste in 'UPI Transaction ID' field, then click button again.");
 
-  // Form will be submitted only after customer enters Transaction ID and presses button again
-  // (So owner will get email with payment proof)
   if(document.querySelector("input[name='UPI Transaction ID']").value !== ""){
     document.getElementById("orderform").submit();
   }
@@ -145,4 +149,4 @@ function pay(){
 </script>
 
 </body>
-                                                                                </html>
+  </html>
