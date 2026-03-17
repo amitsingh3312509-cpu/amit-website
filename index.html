@@ -5,7 +5,6 @@
 <title>Royal Pizza Home</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
@@ -14,26 +13,12 @@ body{margin:0;font-family:Arial;background:#f2f2f2;}
 
 .header{
 background:#ff3b3b;color:white;text-align:center;
-padding:15px;font-size:26px;font-weight:bold;
-}
-
-.marquee{
-background:black;color:white;padding:8px;
-font-family:'Pacifico';overflow:hidden;white-space:nowrap;
-}
-.marquee span{
-display:inline-block;padding-left:100%;
-animation:scroll 12s linear infinite;
-}
-@keyframes scroll{
-0%{transform:translateX(0);}
-100%{transform:translateX(-100%);}
+padding:15px;font-size:24px;font-weight:bold;
 }
 
 .container{
-max-width:800px;margin:20px auto;background:white;
+max-width:700px;margin:20px auto;background:white;
 padding:20px;border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,0.2);
 }
 
 input,select{
@@ -42,24 +27,33 @@ border-radius:5px;border:1px solid #ccc;
 }
 
 button{
-padding:12px;background:#2a9d8f;color:white;
+padding:12px;background:#28a745;color:white;
 border:none;width:100%;border-radius:6px;margin-top:6px;
 }
 
-.cart{background:#eee;padding:10px;margin-top:10px;border-radius:6px;}
-.remove{background:red;font-size:12px;padding:3px 8px;}
-
-.note{color:red;font-weight:bold;text-align:center;}
-
-.bottom-support{
-position:fixed;bottom:15px;left:50%;
-transform:translateX(-50%);
-display:flex;gap:25px;
+.cart{
+background:#eee;padding:10px;margin-top:10px;border-radius:6px;
 }
-.bottom-support a{
-color:white;padding:8px 18px;border-radius:20px;
+
+.remove{
+background:red;font-size:12px;padding:3px 8px;
+}
+
+.note{
+color:red;text-align:center;font-weight:bold;
+}
+
+.bottom{
+position:fixed;bottom:10px;left:50%;
+transform:translateX(-50%);
+display:flex;gap:20px;
+}
+
+.bottom a{
+color:white;padding:8px 15px;border-radius:20px;
 text-decoration:none;font-size:14px;
 }
+
 .whatsapp{background:#25D366;}
 .call{background:#ff3b3b;}
 
@@ -69,170 +63,161 @@ text-decoration:none;font-size:14px;
 
 <body>
 
-<div class="header">🍕 Royal Pizza Home</div>
-
-<div class="marquee">
-<span>Royal Pizza Home | रॉयल पिज़्ज़ा होम</span>
+<div class="header">
+🍕 Royal Pizza Home / रॉयल पिज़्ज़ा होम
 </div>
 
 <div class="container">
 
-<h2>Pizza Menu / पिज़्ज़ा मेनू</h2>
+<h3>Pizza Menu / पिज़्ज़ा मेनू</h3>
 
 <select id="pizza">
 <option value="">Select Pizza / पिज़्ज़ा चुनें</option>
 <option value="150">Veg Pizza ₹150 / वेज पिज़्ज़ा</option>
-<option value="180">Paneer Pizza ₹180 / पनीर पिज़्ज़ा</option>
-<option value="220">Farmhouse ₹220 / फार्महाउस</option>
-<option value="250">Cheese Burst ₹250 / चीज़ बर्स्ट</option>
+<option value="200">Paneer Pizza ₹200 / पनीर पिज़्ज़ा</option>
+<option value="250">Cheese Pizza ₹250 / चीज़ पिज़्ज़ा</option>
 </select>
 
 <label>Quantity / मात्रा</label>
 <input type="number" id="qty" value="1">
 
-<button onclick="addCart()">Add To Cart / कार्ट में जोड़ें</button>
+<button onclick="addCart()">
+Add To Cart / कार्ट में जोड़ें
+</button>
 
 <div class="cart">
-<h3>Cart / कार्ट</h3>
-<div id="cartItems"></div>
+<h4>Cart / कार्ट</h4>
+<div id="cart"></div>
 
 <p>Total / कुल ₹ <span id="total">0</span></p>
-<p>Advance 50% / अग्रिम ₹ <span id="advance">0</span></p>
+<p>Advance 50% / अग्रिम ₹ <span id="adv">0</span></p>
 </div>
 
-<form id="orderForm" action="https://formsubmit.co/amitsingh3312509@gmail.com" method="POST">
+<h3>Customer Details / ग्राहक जानकारी</h3>
 
-<input type="hidden" name="_captcha" value="false">
-
-<h2>Customer Details / ग्राहक जानकारी</h2>
-
-<label>Name / नाम</label>
-<input type="text" id="name" name="Name" required>
-
-<label>Mobile / मोबाइल</label>
-<input type="number" id="mobile" name="Mobile" required>
-
-<label>Village / गांव</label>
-<input type="text" id="village" name="Village" required>
-
-<input type="hidden" name="Pizza Details" id="pizzaInput">
-<input type="hidden" name="Total Amount" id="totalInput">
-<input type="hidden" name="Advance Amount" id="advanceInput">
-
-<h2>Payment / भुगतान</h2>
-
-<p><b>UPI Number:</b> 7309277213@ibl</p>
+<input id="name" placeholder="Name / नाम" required>
+<input id="mobile" placeholder="Mobile / मोबाइल" required>
+<input id="village" placeholder="Village / गांव" required>
 
 <p class="note">
 ⚠️ 50% Advance Payment Compulsory  
 ⚠️ 50% अग्रिम भुगतान अनिवार्य है
 </p>
 
-<button type="button" onclick="payUPI()">Pay 50%</button>
+<button onclick="payUPI()">
+💳 Pay 50% Advance / 50% अग्रिम भुगतान करें
+</button>
 
-<label>Transaction ID / ट्रांजैक्शन आईडी</label>
-<input type="text" id="txn" name="TransactionID" required>
+<input id="txn" placeholder="Transaction ID / ट्रांजैक्शन आईडी डालें">
 
-<h2>Receipt / रसीद</h2>
+<button onclick="submitOrder()">
+Submit Order / ऑर्डर भेजें
+</button>
 
-<p>No: <span id="receipt"></span></p>
-<p>Date: <span id="date"></span></p>
-<p>Time: <span id="time"></span></p>
-<p>Day: <span id="day"></span></p>
-
-<button type="submit">Submit Order</button>
-
-</form>
-
-<button onclick="downloadPDF()">Download Full Receipt</button>
+<button onclick="downloadPDF()">
+📄 Download Receipt / रसीद डाउनलोड करें
+</button>
 
 </div>
 
-<div class="bottom-support">
-<a class="whatsapp" href="https://wa.me/917309277213">WhatsApp</a>
+<div class="bottom">
+<a class="whatsapp" id="wa">WhatsApp</a>
 <a class="call" href="tel:7309277213">Call</a>
 </div>
 
 <script>
 
-/* CART */
-let cart=[],total=0;
+let cart=[],total=0,paid=false;
 
+/* ADD CART */
 function addCart(){
 let p=document.getElementById("pizza");
 let name=p.options[p.selectedIndex].text;
 let price=p.value;
 let q=document.getElementById("qty").value;
 
-if(price==""){alert("Select Pizza");return;}
+if(price==""){
+alert("Select Pizza / पिज़्ज़ा चुनें");
+return;
+}
 
 cart.push({name,price,q});
 total+=price*q;
-show();
+showCart();
 }
 
-function show(){
-let box=document.getElementById("cartItems");
+/* SHOW CART */
+function showCart(){
+let box=document.getElementById("cart");
 box.innerHTML="";
+
 cart.forEach((c,i)=>{
 box.innerHTML+=c.name+" x"+c.q+" ₹"+(c.price*c.q)+
 " <button class='remove' onclick='removeItem("+i+")'>X</button><br>";
 });
+
 document.getElementById("total").innerText=total;
-document.getElementById("advance").innerText=Math.round(total/2);
+document.getElementById("adv").innerText=Math.round(total/2);
 }
 
+/* REMOVE ITEM */
 function removeItem(i){
 total-=cart[i].price*cart[i].q;
 cart.splice(i,1);
-show();
+showCart();
 }
 
-/* PAYMENT */
-let paid=false;
-
+/* UPI PAYMENT */
 function payUPI(){
+
 let adv=Math.round(total/2);
-if(adv==0){alert("Select Pizza First");return;}
-window.location.href="upi://pay?pa=7309277213@upi&am="+adv+"&cu=INR";
-paid=true;
-}
 
-/* RECEIPT DATA */
-let r="RP"+Math.floor(Math.random()*100000);
-let d=new Date();
-
-document.getElementById("receipt").innerText=r;
-document.getElementById("date").innerText=d.toLocaleDateString();
-document.getElementById("time").innerText=d.toLocaleTimeString();
-document.getElementById("day").innerText=d.toLocaleDateString('en-US',{weekday:'long'});
-
-/* SUBMIT */
-document.getElementById("orderForm").addEventListener("submit",function(e){
-
-if(!paid){
-alert("पहले payment करें / Please pay first");
-e.preventDefault();
+if(adv==0){
+alert("Select pizza first / पहले पिज़्ज़ा चुनें");
 return;
 }
 
-document.getElementById("pizzaInput").value=JSON.stringify(cart);
-document.getElementById("totalInput").value=total;
-document.getElementById("advanceInput").value=Math.round(total/2);
+let upi="upi://pay?pa=7309277213@ibl&pn=RoyalPizzaHome&am="+adv+"&cu=INR";
 
-/* WhatsApp */
-let msg="🍕 New Order\n";
-msg+="Name:"+document.getElementById("name").value+"\n";
-msg+="Mobile:"+document.getElementById("mobile").value+"\n";
-msg+="Village:"+document.getElementById("village").value+"\n";
-msg+="Order:"+JSON.stringify(cart)+"\n";
-msg+="Total ₹"+total;
+window.location.href=upi;
 
-window.open("https://wa.me/917309277213?text="+encodeURIComponent(msg));
+paid=true;
+}
 
-});
+/* SUBMIT ORDER */
+function submitOrder(){
 
-/* FULL RECEIPT PDF */
+if(!paid){
+alert("Please pay first / पहले भुगतान करें");
+return;
+}
+
+let name=document.getElementById("name").value;
+let mobile=document.getElementById("mobile").value;
+let village=document.getElementById("village").value;
+let txn=document.getElementById("txn").value;
+
+if(name=="" || mobile=="" || village=="" || txn==""){
+alert("Fill all details / सभी जानकारी भरें");
+return;
+}
+
+let msg="🍕 Order / ऑर्डर\n";
+msg+="Name: "+name+"\n";
+msg+="Mobile: "+mobile+"\n";
+msg+="Village: "+village+"\n";
+msg+="Items: "+JSON.stringify(cart)+"\n";
+msg+="Total ₹"+total+"\n";
+msg+="Txn: "+txn;
+
+let wa="https://wa.me/917309277213?text="+encodeURIComponent(msg);
+
+window.open(wa);
+
+alert("Order Sent on WhatsApp / ऑर्डर भेज दिया गया");
+}
+
+/* PDF RECEIPT */
 function downloadPDF(){
 
 const {jsPDF}=window.jspdf;
@@ -240,33 +225,22 @@ let pdf=new jsPDF();
 
 let y=20;
 
-pdf.text("Royal Pizza Home Receipt",20,y); y+=10;
-
-pdf.text("Receipt No: "+r,20,y); y+=8;
-pdf.text("Date: "+d.toLocaleDateString(),20,y); y+=8;
-pdf.text("Time: "+d.toLocaleTimeString(),20,y); y+=8;
-pdf.text("Day: "+d.toLocaleDateString('en-US',{weekday:'long'}),20,y); y+=10;
+pdf.text("Royal Pizza Home Receipt / रॉयल पिज़्ज़ा रसीद",20,y); y+=10;
 
 pdf.text("Name: "+document.getElementById("name").value,20,y); y+=8;
 pdf.text("Mobile: "+document.getElementById("mobile").value,20,y); y+=8;
 pdf.text("Village: "+document.getElementById("village").value,20,y); y+=10;
 
-pdf.text("Order Details:",20,y); y+=8;
-
-cart.forEach((c)=>{
-pdf.text(c.name+" x"+c.q+" = ₹"+(c.price*c.q),20,y);
+cart.forEach(c=>{
+pdf.text(c.name+" x"+c.q+" ₹"+(c.price*c.q),20,y);
 y+=8;
 });
 
-y+=5;
 pdf.text("Total: ₹"+total,20,y); y+=8;
 pdf.text("Advance: ₹"+Math.round(total/2),20,y); y+=8;
-pdf.text("Transaction ID: "+document.getElementById("txn").value,20,y); y+=10;
+pdf.text("Transaction ID: "+document.getElementById("txn").value,20,y);
 
-pdf.text("Thank You!",20,y);
-
-pdf.save("Receipt_"+r+".pdf");
-
+pdf.save("Receipt.pdf");
 }
 
 </script>
