@@ -2,31 +2,223 @@
 <html>
 <head>
 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+}
+
+/* Header */
+
+.header{
+background:#ff3b3b;
+color:white;
+text-align:center;
+padding:15px;
+font-size:26px;
+font-weight:bold;
+}
+
+/* scrolling text */
+
+.marquee{
+background:black;
+color:white;
+padding:10px;
+font-family:'Pacifico',cursive;
+font-size:18px;
+overflow:hidden;
+white-space:nowrap;
+}
+
+.marquee span{
+display:inline-block;
+padding-left:100%;
+animation:scroll 12s linear infinite;
+}
+
+@keyframes scroll{
+0%{transform:translateX(0);}
+100%{transform:translateX(-100%);}
+}
+
+/* slider */
+
+.slider{
+position:relative;
+width:100%;
+height:90vh;
+overflow:hidden;
+}
+
+.slide{
+position:absolute;
+width:100%;
+height:100%;
+opacity:0;
+transition:opacity 2s;
+}
+
+.slide img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.active{
+opacity:1;
+}
+
+/* SMALL bottom buttons */
+
+.bottom-support{
+position:fixed;
+bottom:10px;
+left:10px;
+display:flex;
+gap:10px;
+z-index:999;
+}
+
+.bottom-support a{
+text-align:center;
+color:white;
+padding:8px 14px;
+font-size:14px;
+font-weight:bold;
+text-decoration:none;
+border-radius:6px;
+}
+
+.whatsapp{
+background:#25D366;
+}
+
+.call{
+background:#ff3b3b;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+🙏Welcome to Royal Pizza Home Bansdih Ballia Near Milan Katara Jin Baba Ke Bagal Mein Bansdih Badi Bazar Ballia (U.P) 🙏Contact no 8177073151      ,8052114997   
+
+</div>
+
+<div class="marquee">
+<span>
+ 🙏Welcome to Royal Pizza Home Bansdih Ballia (Near Milan Katara Jin Baba Ke Bagal Mein) |
+रॉयल पिज़्ज़ा होम बांसडीह बलिया |
+Bansdih Badi Bazar Ballia (U.P)
+</span>
+</div>
+
+<div class="slider">
+
+<div class="slide active">
+<img src="https://i.postimg.cc/nVvpGGwQ/Screenshot-20260315-175430-2.jpg">
+</div>
+
+<div class="slide">
+<img src="https://i.postimg.cc/DZdFn1Dd/Screenshot-20260315-175417-2.jpg">
+</div>
+
+<div class="slide">
+<img src="https://i.postimg.cc/wvH8f7vq/Screenshot-20260315-175404-2.jpg">
+</div>
+
+<div class="slide">
+<img src="https://i.postimg.cc/3NBxWrQY/Screenshot-20260315-164206-2.jpg">
+</div>
+
+<div class="slide">
+<img src="https://i.postimg.cc/FRh8b8WW/Screenshot-20260315-175302-2.jpg">
+</div>
+
+<div class="slide">
+<img src="https://i.postimg.cc/DzZ0BvCj/Screenshot-20260315-164206.png">
+</div>
+
+<div class="slide">
+<img src="https://i.postimg.cc/mDLvQk8Z/Screenshot-20260315-164206.png">
+</div>
+
+</div>
+
+<div class="bottom-support">
+
+<a class="whatsapp" href="https://wa.me/8177073151" target="_blank">
+📱 WhatsApp
+</a>
+
+<a class="call" href="tel:8052114997">
+📞 Call
+</a>
+
+</div>
+
+<script>
+
+let slides=document.querySelectorAll(".slide");
+let index=0;
+
+setInterval(()=>{
+
+slides[index].classList.remove("active");
+
+index++;
+
+if(index>=slides.length){
+index=0;
+}
+
+slides[index].classList.add("active");
+
+},4500);
+
+</script>
+
+</body>
+<!DOCTYPE html>
+<html>
+<head>
+
 <title>Royal Pizza Home</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 
 body{
 font-family:Arial;
-background:#f3f3f3;
+background:#f2f2f2;
 margin:0;
 padding:20px;
 }
 
 .container{
-max-width:750px;
+max-width:800px;
 margin:auto;
 background:white;
 padding:20px;
 border-radius:10px;
-box-shadow:0 2px 10px rgba(0,0,0,0.2);
+box-shadow:0 0 10px rgba(0,0,0,0.2);
 }
 
 h2{
 text-align:center;
-color:#d62828;
+color:#e63946;
 }
 
 select,input{
@@ -40,7 +232,7 @@ padding:10px;
 background:#2a9d8f;
 color:white;
 border:none;
-cursor:pointer;
+width:100%;
 margin-top:5px;
 }
 
@@ -53,10 +245,6 @@ background:#f1f1f1;
 padding:10px;
 border-radius:6px;
 margin-top:10px;
-}
-
-.total{
-font-weight:bold;
 }
 
 .note{
@@ -74,7 +262,7 @@ font-weight:bold;
 
 <h2>🍕 Royal Pizza Home</h2>
 
-<form action="https://formsubmit.co/amitsingh3312509@gmail.com" method="POST">
+<form id="orderForm" action="https://formsubmit.co/amitsingh3312509@gmail.com" method="POST">
 
 <h3>Pizza Menu / पिज़्ज़ा मेनू</h3>
 
@@ -92,11 +280,7 @@ font-weight:bold;
 
 <input type="number" id="qty" value="1">
 
-<button type="button" onclick="addCart()">
-
-Add To Cart / कार्ट में जोड़ें
-
-</button>
+<button type="button" onclick="addCart()">Add To Cart / कार्ट में जोड़ें</button>
 
 <div class="cart">
 
@@ -104,19 +288,9 @@ Add To Cart / कार्ट में जोड़ें
 
 <div id="cartItems"></div>
 
-<p class="total">
+<p>Total / कुल ₹ <span id="total">0</span></p>
 
-Total Amount / कुल पैसा ₹
-<span id="total">0</span>
-
-</p>
-
-<p class="total">
-
-Advance 50% / अग्रिम ₹
-<span id="advance">0</span>
-
-</p>
+<p>Advance 50% / अग्रिम ₹ <span id="advance">0</span></p>
 
 </div>
 
@@ -133,93 +307,36 @@ Advance 50% / अग्रिम ₹
 
 <h3>Payment / भुगतान</h3>
 
-<p>
-
-UPI Number / यूपीआई नंबर :
-<b>7309277213</b>
-
-</p>
+<p>UPI Number : <b>7309277213</b></p>
 
 <p class="note">
-
-Note / नोट :  
-50% advance payment compulsory hai.  
-Payment ke bina order submit nahi hoga.  
-
-50% अग्रिम भुगतान जरूरी है।  
-भुगतान के बिना ऑर्डर सबमिट नहीं होगा।
-
+50% advance payment compulsory  
+50% अग्रिम भुगतान जरूरी है
 </p>
 
-<button type="button" onclick="payUPI()">
-
-Pay Advance / अग्रिम भुगतान
-
-</button>
-
-<br><br>
+<button type="button" onclick="payUPI()">Pay Advance / अग्रिम भुगतान</button>
 
 <label>Transaction ID / ट्रांजैक्शन आईडी</label>
+<input type="text" name="TransactionID" required>
 
-<input 
-type="text"
-name="TransactionID"
-pattern="[A-Za-z0-9]{10,30}"
-required>
-
+<input type="hidden" name="PizzaDetails" id="pizzaInput">
 <input type="hidden" name="TotalAmount" id="totalInput">
+<input type="hidden" name="AdvanceAmount" id="advanceInput">
 
-<h3>Receipt Details / रसीद</h3>
+<h3>Receipt / रसीद</h3>
 
-<p>
+<p>Receipt No : <span id="receipt"></span></p>
+<p>Date : <span id="date"></span></p>
+<p>Time : <span id="time"></span></p>
+<p>Day : <span id="day"></span></p>
 
-Receipt No / रसीद नंबर :
-<span id="receipt"></span>
-
-</p>
-
-<p>
-
-Date / तारीख :
-<span id="date"></span>
-
-</p>
-
-<p>
-
-Time / समय :
-<span id="time"></span>
-
-</p>
-
-<p>
-
-Day / दिन :
-<span id="day"></span>
-
-</p>
-
-<button type="submit">
-
-Submit Order / ऑर्डर भेजें
-
-</button>
+<button type="submit">Submit Order / ऑर्डर भेजें</button>
 
 </form>
 
 <br>
 
-<button onclick="downloadMenu()">
-
-Download Menu PDF / मेनू डाउनलोड
-
-</button>
-
-<button onclick="downloadReceipt()">
-
-Download Receipt / रसीद डाउनलोड
-
-</button>
+<button onclick="downloadReceipt()">Download Receipt / रसीद डाउनलोड</button>
 
 </div>
 
@@ -227,29 +344,23 @@ Download Receipt / रसीद डाउनलोड
 
 let cart=[]
 let total=0
+let payment=false
 
 function addCart(){
 
 let pizza=document.getElementById("pizza")
-
 let name=pizza.options[pizza.selectedIndex].text
-
 let price=pizza.value
-
 let qty=document.getElementById("qty").value
 
 if(price==""){
-
-alert("Select Pizza / पिज़्ज़ा चुनें")
-
+alert("Select Pizza")
 return
-
 }
 
 let itemTotal=price*qty
 
 cart.push({name,price,qty})
-
 total+=itemTotal
 
 showCart()
@@ -265,9 +376,7 @@ cartBox.innerHTML=""
 cart.forEach((item,index)=>{
 
 cartBox.innerHTML+=
-item.name+
-" Qty:"+item.qty+
-" ₹"+(item.price*item.qty)+
+item.name+" Qty:"+item.qty+" ₹"+(item.price*item.qty)+
 " <button class='remove' onclick='removeItem("+index+")'>Remove</button><br>"
 
 })
@@ -279,13 +388,13 @@ let adv=Math.round(total/2)
 document.getElementById("advance").innerText=adv
 
 document.getElementById("totalInput").value=total
+document.getElementById("advanceInput").value=adv
 
 }
 
 function removeItem(i){
 
 total-=cart[i].price*cart[i].qty
-
 cart.splice(i,1)
 
 showCart()
@@ -297,73 +406,79 @@ function payUPI(){
 let adv=Math.round(total/2)
 
 if(adv==0){
-
 alert("Select Pizza First")
-
 return
-
 }
 
 let upi="upi://pay?pa=7309277213@upi&pn=RoyalPizzaHome&am="+adv+"&cu=INR"
 
 window.location.href=upi
 
-}
-
-function downloadMenu(){
-
-let text=
-"ROYAL PIZZA HOME MENU\n\n"+
-"Veg Pizza ₹150\n"+
-"Paneer Pizza ₹180\n"+
-"Farmhouse ₹220\n"+
-"Cheese Burst ₹250"
-
-let blob=new Blob([text],{type:"application/pdf"})
-
-let link=document.createElement("a")
-
-link.href=URL.createObjectURL(blob)
-
-link.download="pizza_menu.pdf"
-
-link.click()
+payment=true
 
 }
 
-let receiptNo="RP"+Math.floor(Math.random()*100000)
+document.getElementById("orderForm").addEventListener("submit",function(e){
 
-document.getElementById("receipt").innerText=receiptNo
+if(payment==false){
+
+alert("Please pay advance first")
+e.preventDefault()
+
+}
+
+})
+
+let receipt="RP"+Math.floor(Math.random()*100000)
 
 let d=new Date()
 
+document.getElementById("receipt").innerText=receipt
 document.getElementById("date").innerText=d.toLocaleDateString()
-
 document.getElementById("time").innerText=d.toLocaleTimeString()
-
 document.getElementById("day").innerText=d.toLocaleDateString('en-US',{weekday:'long'})
 
 function downloadReceipt(){
 
-let text=
-"Royal Pizza Receipt\n\n"+
-"Receipt No:"+receiptNo+"\n"+
-"Total ₹"+total+"\n"+
-"Advance ₹"+Math.round(total/2)
+const { jsPDF } = window.jspdf
 
-let blob=new Blob([text])
+let pdf=new jsPDF()
 
-let link=document.createElement("a")
+let name=document.querySelector("[name='Name']").value
+let mobile=document.querySelector("[name='Mobile']").value
+let village=document.querySelector("[name='Village']").value
+let txn=document.querySelector("[name='TransactionID']").value
 
-link.href=URL.createObjectURL(blob)
+let pizzaList=""
 
-link.download="pizza_receipt.txt"
+cart.forEach(item=>{
+pizzaList+=item.name+" Qty:"+item.qty+" ₹"+(item.price*item.qty)+"\n"
+})
 
-link.click()
+pdf.text("Royal Pizza Home Receipt",20,20)
+
+pdf.text("Receipt No: "+receipt,20,40)
+pdf.text("Date: "+document.getElementById("date").innerText,20,50)
+pdf.text("Time: "+document.getElementById("time").innerText,20,60)
+pdf.text("Day: "+document.getElementById("day").innerText,20,70)
+
+pdf.text("Name: "+name,20,90)
+pdf.text("Mobile: "+mobile,20,100)
+pdf.text("Village: "+village,20,110)
+
+pdf.text("Pizza Order:",20,130)
+pdf.text(pizzaList,20,140)
+
+pdf.text("Total: ₹"+total,20,180)
+pdf.text("Advance: ₹"+Math.round(total/2),20,190)
+
+pdf.text("Transaction ID: "+txn,20,210)
+
+pdf.save("Pizza_Receipt_"+receipt+".pdf")
 
 }
 
 </script>
 
 </body>
-  </html>
+</html>
