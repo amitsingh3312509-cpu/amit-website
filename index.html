@@ -9,7 +9,7 @@
 
 <style>
 
-body{margin:0;font-family:Arial;background:#f2f2f2;}
+body{margin:0;font-family:Arial;background:#f5f5f5;}
 
 .header{
 background:#ff3b3b;color:white;text-align:center;
@@ -26,21 +26,15 @@ width:100%;padding:10px;margin:6px 0;
 }
 
 button{
-padding:12px;background:#28a745;color:white;
-border:none;width:100%;border-radius:6px;margin-top:6px;
+width:100%;padding:12px;margin-top:6px;
+border:none;border-radius:6px;color:white;
 }
 
 .cart{background:#eee;padding:10px;margin-top:10px;}
-.remove{background:red;font-size:12px;padding:3px 8px;}
 
-.note{color:red;font-weight:bold;text-align:center;}
+.note{color:red;text-align:center;font-weight:bold;}
 
-.qr{
-width:220px;
-display:block;
-margin:auto;
-cursor:pointer;
-}
+.qr{width:220px;display:block;margin:auto;cursor:pointer;}
 
 .bottom{
 position:fixed;bottom:10px;left:50%;
@@ -49,12 +43,14 @@ display:flex;gap:15px;
 }
 
 .bottom a{
-color:white;padding:8px 14px;border-radius:20px;
+color:white;padding:8px 15px;border-radius:20px;
 text-decoration:none;font-size:14px;
 }
 
 .whatsapp{background:#25D366;}
 .call{background:#ff3b3b;}
+
+.msg{color:green;text-align:center;font-weight:bold;}
 
 </style>
 
@@ -63,15 +59,17 @@ text-decoration:none;font-size:14px;
 <body>
 
 <div class="header">
-🍕 Royal Pizza Home / रॉयल पिज़्ज़ा होम
+🍕 Royal Pizza Home Bansdih
 </div>
 
 <div class="container">
 
+<form id="form" action="https://formsubmit.co/YOUR-EMAIL@gmail.com" method="POST">
+
 <h3>Pizza Menu / पिज़्ज़ा मेनू</h3>
 
 <select id="pizza">
-<option value="">Select Pizza / चुनें</option>
+<option value="">Select Pizza</option>
 <option value="150">Veg ₹150</option>
 <option value="200">Paneer ₹200</option>
 <option value="250">Cheese ₹250</option>
@@ -79,47 +77,54 @@ text-decoration:none;font-size:14px;
 
 <input type="number" id="qty" value="1">
 
-<button onclick="addCart()">Add To Cart / जोड़ें</button>
+<button type="button" onclick="addCart()">Add To Cart</button>
 
 <div class="cart">
 <div id="cart"></div>
 <p>Total ₹ <span id="total">0</span></p>
-<p>Advance (50%) ₹ <span id="adv">0</span></p>
+<p>Advance ₹ <span id="adv">0</span></p>
 </div>
 
 <h3>Customer Details / ग्राहक जानकारी</h3>
 
-<input id="name" placeholder="Name / नाम">
-<input id="mobile" placeholder="Mobile / मोबाइल">
-<input id="village" placeholder="Village / गांव">
+<input name="Name" id="name" placeholder="Name / नाम" required>
+<input name="Mobile" id="mobile" placeholder="Mobile / मोबाइल" required>
+
+<select name="Village" id="village" required onchange="showTime()">
+<option value="">Select Village</option>
+<option value="Seriya" data-time="25">Seriya (25 min)</option>
+<option value="Bansdih" data-time="20">Bansdih (20 min)</option>
+<option value="Halpur" data-time="30">Halpur (30 min)</option>
+<option value="Kewtallia" data-time="35">Kewtallia (35 min)</option>
+<option value="Asega" data-time="40">Asega (40 min)</option>
+</select>
+
+<p id="timeShow"></p>
 
 <p class="note">
-⚠️ 50% advance payment compulsory  
-⚠️ QR scan या click करके payment करें
+⚠️ 50% advance compulsory
 </p>
 
-<!-- QR PAYMENT -->
+<h3>💳 Payment</h3>
 
-<h3>💳 Payment / भुगतान</h3>
+<img class="qr" src="PUT_QR_LINK_HERE" onclick="openUPI()">
 
-<img class="qr"
-src="https://i.postimg.cc/SsQtyw4W/Screenshot-20260319-092835.png"
-onclick="payNow()">
+<p style="text-align:center;">Scan / Click to Pay</p>
 
-<p style="text-align:center;">
-👉 QR पर click करें या scan करें  
-👉 Click or Scan to Pay
-</p>
+<p style="text-align:center;">UPI: 7309277213@ibl</p>
 
-<p style="text-align:center;">
-UPI ID: <b>7309277213@ibl</b>
-</p>
+<input name="TransactionID" id="txn" placeholder="Transaction ID" required>
 
-<input id="txn" placeholder="Transaction ID / ट्रांजैक्शन आईडी">
+<input type="hidden" name="OrderDetails" id="orderData">
+<input type="hidden" name="DeliveryTime" id="hiddenTime">
 
-<button onclick="submitOrder()">Submit Order / ऑर्डर भेजें</button>
+<button type="submit">Submit Order</button>
 
-<button onclick="downloadPDF()">Download Receipt / रसीद डाउनलोड</button>
+</form>
+
+<button onclick="downloadPDF()">Download Receipt</button>
+
+<p class="msg" id="msg"></p>
 
 </div>
 
@@ -130,7 +135,7 @@ UPI ID: <b>7309277213@ibl</b>
 
 <script>
 
-let cart=[],total=0;
+let cart=[],total=0,deliveryTime="";
 
 /* CART */
 function addCart(){
@@ -149,75 +154,95 @@ showCart();
 function showCart(){
 let box=document.getElementById("cart");
 box.innerHTML="";
-cart.forEach((c,i)=>{
-box.innerHTML+=c.name+" x"+c.q+" ₹"+(c.price*c.q)+
-" <button class='remove' onclick='removeItem("+i+")'>X</button><br>";
+cart.forEach(c=>{
+box.innerHTML+=c.name+" x"+c.q+" ₹"+(c.price*c.q)+"<br>";
 });
 document.getElementById("total").innerText=total;
 document.getElementById("adv").innerText=Math.round(total/2);
 }
 
-function removeItem(i){
-total-=cart[i].price*cart[i].q;
-cart.splice(i,1);
-showCart();
+/* VILLAGE TIME */
+function showTime(){
+let select=document.getElementById("village");
+let time=select.options[select.selectedIndex].getAttribute("data-time");
+
+deliveryTime=time;
+document.getElementById("timeShow").innerText="Delivery: "+time+" min";
+document.getElementById("hiddenTime").value=time+" min";
 }
 
-/* PAYMENT */
-
-function payNow(){
+/* UPI */
+function openUPI(){
 window.location.href="upi://pay?pa=7309277213@ibl&pn=RoyalPizzaHome&cu=INR";
 }
 
-/* ORDER */
+/* FORM SUBMIT */
+document.getElementById("form").addEventListener("submit",function(e){
 
-function submitOrder(){
+let txn=document.getElementById("txn").value;
+
+if(txn==""){
+alert("Enter Transaction ID");
+e.preventDefault();
+return;
+}
+
+let data="";
+cart.forEach(c=>{
+data+=c.name+" x"+c.q+" ₹"+(c.price*c.q)+" | ";
+});
+document.getElementById("orderData").value=data;
+
+document.getElementById("msg").innerText=
+"✅ Order Submitted! Delivery in "+deliveryTime+" min";
+
+});
+
+/* PDF */
+function downloadPDF(){
+
+const {jsPDF}=window.jspdf;
+let pdf=new jsPDF();
 
 let name=document.getElementById("name").value;
 let mobile=document.getElementById("mobile").value;
 let village=document.getElementById("village").value;
 let txn=document.getElementById("txn").value;
 
-if(name==""||mobile==""||village==""||txn==""){
-alert("Fill all details");
-return;
-}
+let d=new Date();
 
-let msg="🍕 Order\nName:"+name+
-"\nMobile:"+mobile+
-"\nVillage:"+village+
-"\nItems:"+JSON.stringify(cart)+
-"\nTotal ₹"+total+
-"\nTxn:"+txn;
+let totalAmt=total;
+let adv=Math.round(total/2);
 
-window.open("https://wa.me/917309277213?text="+encodeURIComponent(msg));
+pdf.setTextColor(200,200,200);
+pdf.setFontSize(35);
+pdf.text("Royal Pizza Home Bansdih",10,100,{angle:45});
 
-}
-
-/* PDF */
-
-function downloadPDF(){
-const {jsPDF}=window.jspdf;
-let pdf=new jsPDF();
+pdf.setTextColor(0,0,0);
+pdf.setFontSize(12);
 
 let y=20;
 
-pdf.text("Royal Pizza Receipt",20,y); y+=10;
-
-pdf.text("Name:"+name.value,20,y); y+=8;
-pdf.text("Mobile:"+mobile.value,20,y); y+=8;
-pdf.text("Village:"+village.value,20,y); y+=10;
+pdf.text("ROYAL PIZZA RECEIPT",20,y); y+=10;
+pdf.text("Name: "+name,20,y); y+=8;
+pdf.text("Mobile: "+mobile,20,y); y+=8;
+pdf.text("Village: "+village,20,y); y+=8;
 
 cart.forEach(c=>{
 pdf.text(c.name+" x"+c.q+" ₹"+(c.price*c.q),20,y);
 y+=8;
 });
 
-pdf.text("Total:"+total,20,y); y+=8;
-pdf.text("Advance:"+Math.round(total/2),20,y); y+=8;
-pdf.text("Txn:"+txn.value,20,y);
+pdf.text("Total: ₹"+totalAmt,20,y); y+=8;
+pdf.text("Advance: ₹"+adv,20,y); y+=8;
 
-pdf.save("receipt.pdf");
+pdf.text("Txn: "+txn,20,y); y+=8;
+
+pdf.text("Date: "+d.toLocaleDateString(),20,y); y+=8;
+pdf.text("Time: "+d.toLocaleTimeString(),20,y); y+=8;
+
+pdf.save("Receipt.pdf");
+
 }
 
 </script>
