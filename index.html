@@ -94,7 +94,7 @@ padding:3px 8px;border-radius:4px;margin-left:5px;
 <option value="Kewtallia Khurd" data-time="35" data-charge="35">Kewtallia Khurd (35 min | ₹35)</option>
 <option value="Aadar" data-time="25" data-charge="20">Aadar (25 min | ₹20)</option>
 <option value="Dadar" data-time="30" data-charge="25">Dadar (30 min | ₹25)</option>
-<option value="Dewdih" data-time="40" data-charge="40">Dewdih (40 min | ₹40)</option>
+<option value="Dewdih" data-time="30" data-charge="30">Dewdih (20 min | ₹20)</option>
 <option value="Bansdih" data-time="20" data-charge="10">Bansdih (20 min | ₹10)</option>
 <option value="Vidya Bhawan Narayanpur" data-time="25" data-charge="30">Vidya Bhawan Narayanpur (25 min | ₹30)</option>
 <option value="Chhotaki Seriya" data-time="25" data-charge="20">Chhotaki Seriya (25 min | ₹20)</option>
@@ -114,7 +114,8 @@ padding:3px 8px;border-radius:4px;margin-left:5px;
 
 <input name="TransactionID" id="txn" placeholder="Transaction ID" required>
 
-<input type="hidden" name="OrderDetails" id="orderData">
+<!-- EMAIL FULL RECEIPT -->
+<input type="hidden" name="FullReceipt" id="fullReceipt">
 
 <button type="submit" class="submit-btn">Submit Order</button>
 
@@ -186,18 +187,45 @@ function openUPI(){
 window.location.href="upi://pay?pa=7309277213@ibl&pn=RoyalPizzaHome&cu=INR";
 }
 
-/* SUBMIT FULL MESSAGE */
+/* SUBMIT */
 document.getElementById("form").addEventListener("submit",function(e){
 
 e.preventDefault();
 
 let v=document.getElementById("village");
 let village=v.value;
-
 let time=v.options[v.selectedIndex].getAttribute("data-time");
 let charge=v.options[v.selectedIndex].getAttribute("data-charge");
 
-/* FULL MESSAGE */
+let d=new Date();
+
+/* EMAIL RECEIPT DATA */
+let items="";
+cart.forEach(c=>{
+items+=c.name+" x"+c.q+" ₹"+(c.price*c.q)+"\n";
+});
+
+let final=total+delivery;
+let adv=Math.round(final/2);
+
+let fullData =
+"ROYAL PIZZA RECEIPT\n\n"+
+"Name: "+document.getElementById("name").value+"\n"+
+"Mobile: "+document.getElementById("mobile").value+"\n"+
+"Village: "+village+"\n\n"+
+items+
+"\nTotal: ₹"+final+
+"\nAdvance: ₹"+adv+
+"\nDelivery: ₹"+delivery+
+"\nTxn ID: "+document.getElementById("txn").value+
+"\nDate: "+d.toLocaleDateString()+
+"\nDay: "+d.toLocaleDateString('en-US',{weekday:'long'})+
+"\nTime: "+d.toLocaleTimeString()+
+"\nDelivery Time: "+time+" min";
+
+document.getElementById("fullReceipt").value=fullData;
+
+/* MESSAGE */
 document.getElementById("msg").innerText =
 "✅ Order Submitted Successfully\n\n" +
 "🏡 Village: " + village + "\n\n" +
@@ -209,7 +237,7 @@ document.getElementById("msg").innerText =
 /* 20 sec delay */
 setTimeout(()=>{
 this.submit();
-},20000);
+},5000);
 
 });
 
@@ -255,6 +283,7 @@ pdf.text("Delivery: ₹"+delivery,20,y); y+=8;
 pdf.text("Txn ID: "+txn,20,y); y+=8;
 
 pdf.text("Date: "+d.toLocaleDateString(),20,y); y+=8;
+pdf.text("Day: "+d.toLocaleDateString('en-US',{weekday:'long'}),20,y); y+=8;
 pdf.text("Time: "+d.toLocaleTimeString(),20,y); y+=8;
 
 pdf.text("Delivery Time: "+time+" min",20,y);
